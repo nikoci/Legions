@@ -1,0 +1,13 @@
+name: Legions
+version: '${project.version}'
+main: se.nikoci.legions.Legions
+api-version: 1.19
+prefix: Legions
+authors: [ nikoci ]
+description: A clan plugin like factions
+website: https://nikoci.se
+commands:
+  hello:
+    description: Says hello to the player
+    usage: /hello
+    aliases: [ henlo ]
