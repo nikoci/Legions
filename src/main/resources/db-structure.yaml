@@ -1,10 +1,10 @@
 legions:
   id: "INTEGER PRIMARY KEY AUTOINCREMENT" # Legion id
   name: "STRING UNIQUE NOT NULL" # Legion name
-  description: "STRING" # Legion description
-  icon: "STRING" # URL or Path to legion icon
+  description: "STRING NOT NULL" # Legion description
+  icon: "STRING NOT NULL" # URL or Path to legion icon
   leader: "STRING NOT NULL" # UUID of legion leader
-  members: "STRING" # Array of legion members (UUID's)
+  members: "STRING NOT NULL" # Array of legion members (UUID's)
   power: "INTEGER NOT NULL" # Legion current power
-  core: "STRING" # Coordinates to legion core
+  core: "STRING NOT NULL" # Coordinates to legion core
 

@@ -1,12 +1,11 @@
 package se.nikoci.legions;
 
 import com.google.gson.Gson;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.yaml.snakeyaml.Yaml;
-import se.nikoci.legions.structs.Legion;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,8 +14,10 @@ import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Database {
     private final String path;
@@ -33,10 +34,6 @@ public class Database {
         } catch (IOException | SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public void disconnect(@NotNull Connection conn){
-        try { conn.close(); } catch (SQLException e) { throw new RuntimeException(e); }
     }
 
     public Database init(){
@@ -72,8 +69,6 @@ public class Database {
         if (is != null) yis = snake.load(is);
         if (yis != null) yaml = yis;
         var structure = new HashMap<String, String>();
-
-        Legions.logger.info("parseStructure: " + yaml);
 
         for (var es : yaml.entrySet()) {
             var key = es.getKey().toString();
@@ -126,20 +121,7 @@ public class Database {
         }
     }
 
-    @Getter
-    @AllArgsConstructor
-    private static class SelectObject {
-        private String table;
-        private String[] targets;
-        private String[] conditions;
-        private Object[] results;
-
-        public <T> T map(Class<T> classOfT) {
-
-        }
-    }
-
-    public SelectObject select(String table, String[] targets, String[] conditions) {
+    public JSONArray select(String table, String[] conditions){
         var sql = new StringBuilder();
         sql.append("SELECT * FROM ").append(table);
 
@@ -149,37 +131,49 @@ public class Database {
         }
 
         var conn = connect();
-        var result = new ArrayList<>();
+        var result = new JSONArray();
 
         try {
             var st = conn.createStatement();
             var rs = st.executeQuery(sql.toString());
 
-            while(rs.next()) {
-                for (var t : targets) result.add(rs.getObject(t)); }
+            ResultSetMetaData md = rs.getMetaData();
+            int numCols = md.getColumnCount();
+            List<String> colNames = IntStream.range(0, numCols)
+                    .mapToObj(i -> {
+                        try {
+                            return md.getColumnName(i + 1);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                            return "?";
+                        }
+                    }).toList();
+
+            while (rs.next()) {
+                JSONObject row = new JSONObject();
+                colNames.forEach(cn -> {
+                    try {
+                        row.put(cn, rs.getObject(cn));
+                    } catch (JSONException | SQLException e) {
+                        e.printStackTrace();
+                    }
+                });
+                result.put(row);
+            }
 
             conn.close();
         } catch (SQLException e) {
             throw new RuntimeException(e); }
 
-        return new SelectObject(table, targets, conditions, result.toArray());
+        return result;
     }
 
-    public SelectObject select(String table, String[] targets) {
-        return select(table, targets, null); }
-
-    public HashMap<Integer, Legion> getLegions() {
-        var res = select("legions", new String[]{
-                "id",
-                "name",
-                "description",
-                "icon",
-                "leader",
-                "members",
-                "power",
-                "core"
-        }, null);
-
-        var test = res.map(Legion.class);
+    public <T> List<T> selectParse(String table, String[] conditions, Class<T> tClass) {
+        List<T> lt = new ArrayList<>();
+        for (var o : select(table, conditions)) lt.add(new Gson().fromJson(o.toString(), tClass));
+        return lt;
     }
+
+    public <T> List<T> selectParse(String table, Class<T> tClass) {
+        return selectParse(table, null, tClass); }
 }

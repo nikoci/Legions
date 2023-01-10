@@ -14,7 +14,7 @@ public class Factory {
     private static Map<Integer, Legion> legions = new HashMap<>(); // <id, legion>
 
     public static void load(Database db){
-        legions = db.getLegions();
+        //legions = db.getLegions();
 
     }
 
