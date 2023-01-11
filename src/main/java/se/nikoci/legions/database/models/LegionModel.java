@@ -1,16 +1,16 @@
-package se.nikoci.legions.structs;
+package se.nikoci.legions.database.models;
 
-import com.google.gson.JsonParser;
 import com.google.gson.annotations.Expose;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.json.JSONArray;
+import se.nikoci.legions.structs.Legion;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class LegionHook {
+public class LegionModel {
 
     @Expose private Integer id;
     @Expose private String name;
@@ -21,7 +21,7 @@ public class LegionHook {
     @Expose private Integer power;
     @Expose private String core; //JSON Array String[uuid, x, y, z]
 
-    public Legion hook() {
+    public Legion toLegion() {
         var members = new ArrayList<OfflinePlayer>();
         new JSONArray(this.members)
                 .forEach(i -> members.add(Bukkit.getOfflinePlayer(UUID.fromString(i.toString()))));
@@ -53,7 +53,6 @@ public class LegionHook {
                 Bukkit.getOfflinePlayer(UUID.fromString(this.leader)),
                 members,
                 power,
-                20, //TODO: basePower + 2 for each member
                 new Location(Bukkit.getWorld(cWorld), x, y, z)
         );
     }

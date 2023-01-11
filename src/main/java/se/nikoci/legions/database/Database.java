@@ -1,4 +1,4 @@
-package se.nikoci.legions;
+package se.nikoci.legions.database;
 
 import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.yaml.snakeyaml.Yaml;
+import se.nikoci.legions.Legions;
 
 import java.io.IOException;
 import java.io.InputStream;

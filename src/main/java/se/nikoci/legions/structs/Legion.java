@@ -7,17 +7,18 @@ import org.bukkit.OfflinePlayer;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 @RequiredArgsConstructor
+@Builder
 public class Legion {
 
-    @NonNull private Integer id;
+    private Integer id;
     @NonNull private String name;
-    @NonNull private String description;
-    @NonNull private String icon;
+    private String description;
+    private String icon;
     @NonNull private OfflinePlayer leader;
-    @NonNull private List<OfflinePlayer> members; //JSON Array String[uuid...]
-    @NonNull private Integer power;
-    @NonNull private Integer maxPower;
-    @NonNull private Location core; //JSON Array String[uuid, x, y, z]
+    private List<OfflinePlayer> members;
+    private Integer power = 10;
+    private Location core;
 
 }

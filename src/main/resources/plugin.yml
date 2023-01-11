@@ -7,7 +7,6 @@ authors: [ nikoci ]
 description: A clan plugin like factions
 website: https://nikoci.se
 commands:
-  hello:
-    description: Says hello to the player
-    usage: /hello
-    aliases: [ henlo ]
+  legion:
+    description: somecommand
+    usage: /legion

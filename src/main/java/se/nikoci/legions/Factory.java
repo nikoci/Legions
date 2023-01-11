@@ -3,6 +3,7 @@ package se.nikoci.legions;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import se.nikoci.legions.database.Database;
 import se.nikoci.legions.structs.Legion;
 
 import java.util.HashMap;
