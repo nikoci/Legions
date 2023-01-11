@@ -4,6 +4,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import se.nikoci.legions.commands.LegionCommand;
 import se.nikoci.legions.database.Database;
 import se.nikoci.legions.structs.EventHandler;
+import se.nikoci.legions.structs.Legion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public final class Legions extends JavaPlugin {
     @Override
     public void onEnable() {
         eventHandlers = new ArrayList<>();
-        commandManager = new CmdManager();
+        commandManager = new CmdManager(this);
         logger = this.getLogger();
         db = new Database("legions.db").init();
 
