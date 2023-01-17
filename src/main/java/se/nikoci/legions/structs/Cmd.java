@@ -11,12 +11,12 @@ public interface Cmd {
 
     String name();
     String description();
-    default List<CmdValue<?>> values() { return null; }
+    default List<ParsablePair<?>> values() { return null; }
     default CmdType type() { return CmdType.Player; }
     default List<Permission> permissions(){ return null; }
     default Map<String, Cmd> subcommands(){ return null; }
 
-    boolean execute(@NotNull CommandSender sender, @NotNull List<CmdValue<?>> values);
+    boolean execute(@NotNull CommandSender sender, @NotNull List<ParsablePair<?>> values);
 
 
 }

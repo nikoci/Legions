@@ -1,6 +1,5 @@
 package se.nikoci.legions;
 
-import com.google.common.reflect.TypeToken;
 import lombok.Getter;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -10,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import se.nikoci.legions.structs.Cmd;
 import se.nikoci.legions.structs.CmdType;
+import se.nikoci.legions.structs.ParsablePair;
 import se.nikoci.legions.structs.Pair;
 
 import java.util.Arrays;
@@ -76,16 +76,7 @@ public class CmdManager implements CommandExecutor {
             return true;
         }
 
-        //Check CmdValue List
-        if (cmd.values() != null) {
-            for (var cmdVal : cmd.values()){
-                for (var a : removeFirstElement(cmdArgs)) {
-                    cmdVal
-                }
-            }
-        }
-
-        return cmd.execute(sender, cmdArgs);
+        return cmd.execute(sender, ParsablePair.checkList(cmd.values(), args));
     }
 
     public Pair<Cmd, String[]> getCommand(String[] args, Cmd cmd){

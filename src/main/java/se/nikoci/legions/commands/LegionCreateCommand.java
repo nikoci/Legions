@@ -3,10 +3,9 @@ package se.nikoci.legions.commands;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import se.nikoci.legions.structs.Cmd;
-import se.nikoci.legions.structs.CmdValue;
+import se.nikoci.legions.structs.ParsablePair;
 
 import java.util.List;
-import java.util.Map;
 
 public class LegionCreateCommand implements Cmd {
     @Override
@@ -20,14 +19,14 @@ public class LegionCreateCommand implements Cmd {
     }
 
     @Override
-    public List<CmdValue<?>> values() {
+    public List<ParsablePair<?>> values() {
         return List.of(
-                CmdValue.of("name", ""),
-                CmdValue.of("description", "", false));
+                ParsablePair.of("name", ""),
+                ParsablePair.of("description", "").setRequired(true).setSingle(true));
     }
 
     @Override
-    public boolean execute(@NotNull CommandSender sender, @NotNull List<CmdValue<?>> values) {
+    public boolean execute(@NotNull CommandSender sender, @NotNull List<ParsablePair<?>> values) {
         sender.sendMessage("legion create command");
         sender.sendMessage(values.toString());
         return true;
